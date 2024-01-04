@@ -1,0 +1,7 @@
+{
+  "name": "Batch Contact Saver",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
