@@ -38,3 +38,10 @@ export const DefaultGroup: Group = {
     name: "",
     contacts: []
 }
+
+// Default values for a contact
+export const DefaultContact: Contact = {
+    id: 0,
+    phone: "",
+    fullname: ""
+}

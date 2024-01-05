@@ -1,11 +1,15 @@
-import { IonImg, IonLabel } from '@ionic/react';
+import { IonImg } from '@ionic/react';
 import './Empty.css';
 
-const Empty: React.FC = () => {
+interface ContainerProps{
+  message?: string;
+}
+
+const Empty: React.FC<ContainerProps> = ({ message }) => {
   return (
     <div>
       <div className="container">
-        <h2>Ajoutez un contact !</h2>
+        <h2>{ message || "OUPS" }</h2>
         <IonImg className='empty-image' src='/empty.png'></IonImg>
       </div>
     </div>

@@ -2,10 +2,21 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabe
 import './ListGroups.css';
 import { pencil, people, trash } from 'ionicons/icons';
 import '../data/types';
-import { FakeGroups } from '../data/samples';
+import { getGroups } from '../data';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import Empty from '../components/Empty';
 
 const ListGroups: React.FC = () => {
+  const [groups, setGroups] = useState<Group[]>([]);
+  useState(() => {
+    (async () =>  {
+      const _groups = await getGroups();
+      setGroups(_groups);
+    })();
+  });
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -20,8 +31,12 @@ const ListGroups: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <div>
+          { groups.length === 0 && (
+            <div className="empty-box"><Empty message="Ajoutez des groupes !" /></div>
+          )}
+
           {/* List of the contacts groups  */}
-          <IonList inset={true}>
+          { groups.length > 0 && <IonList inset={true}>
             <IonListHeader>
               <IonLabel>Groupes ajoutés</IonLabel>
               <IonButton size='small'>
@@ -29,7 +44,7 @@ const ListGroups: React.FC = () => {
               </IonButton>
             </IonListHeader>
 
-            {FakeGroups.map(group => (
+            {groups.map(group => (
               <IonItem href={`/groups/${group.id}`} button detail key={group.id}>
                 <IonIcon color="primary" slot="start" icon={people} size="large"></IonIcon>
                 <IonLabel>{group.name}</IonLabel>
@@ -45,10 +60,10 @@ const ListGroups: React.FC = () => {
                     <IonIcon icon={trash}></IonIcon>
                   </IonButton>
                 </IonButtons>
-                <IonNote slot='end'>15</IonNote>
+                <IonNote slot='end'>{group.contacts.length}</IonNote>
               </IonItem>
             ))}
-          </IonList>
+          </IonList>}
 
         </div>
       </IonContent>
