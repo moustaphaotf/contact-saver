@@ -1,28 +1,41 @@
 import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader } from '@ionic/react';
 import { addCircle, pencil, person, save, trash } from 'ionicons/icons';
 import '../data/types';
+import { useEffect, useState } from 'react';
+import { DefaultGroup } from '../data/samples';
 
 interface ContainerProps {
-  group?: Group
+  group: Group
 }
 
-const GroupManager: React.FC<ContainerProps> = ({ group }) => {
-  const isNew = group === undefined;
+const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }) => {
+  const [group, setGroup] = useState<Group>(DefaultGroup);
+  const [isNew, setIsNew] = useState(false);
+
+  useEffect(() => {
+    // Load group infos from props when it's in update mode
+    const _isNew = _group === undefined;
+    setIsNew(_isNew);
+    if(!isNew) {
+      setGroup(_group);
+    }
+
+  }, [_group]);
+
   return (
     <>
         <div>
           <IonList inset={true}>
             {/* The group name */}
             <IonItem>
-              <IonInput autofocus={true} type='text' labelPlacement="stacked" label='Nom du groupe' placeholder='mes amis de classe'></IonInput>
+              <IonInput value={group.name} autofocus={true} type='text' labelPlacement="stacked" label='Nom du groupe' placeholder='mes amis de classe'></IonInput>
             </IonItem>
           </IonList>
 
           <IonList inset={true}>
             {/* Form to add contacts to the list*/}
             <IonItem>
-                <IonInput type='tel' labelPlacement="stacked" label='Numéro à ajouter' placeholder='611 000 000'>
-                </IonInput>
+                <IonInput type='tel' labelPlacement="stacked" label='Numéro à ajouter' placeholder='611 000 000'></IonInput>
                   <IonButton size='large' slot='end' fill='clear'>
                     <IonIcon icon={addCircle}></IonIcon>
                   </IonButton>
@@ -38,21 +51,24 @@ const GroupManager: React.FC<ContainerProps> = ({ group }) => {
                 <IonLabel>Supprimer tout</IonLabel>
               </IonButton>
             </IonListHeader>
-            <IonItem >
-              <IonIcon color="primary" slot="start" icon={person} size="large"></IonIcon>
-              <IonLabel>+224 625 126 703</IonLabel>
+            {group.contacts.map(contact => (
+              <IonItem key={contact.id}>
+                <IonIcon color="primary" slot="start" icon={person} size="large"></IonIcon>
+                <IonLabel>{contact.phone}</IonLabel>
 
-              <IonButtons>
-                <IonButton fill='clear' color="secondary" size='default'>
-                  <IonIcon icon={pencil}></IonIcon>
-                </IonButton>
-                
-                <IonButton fill="clear" color="danger" size='default'>
-                  <IonIcon icon={trash}></IonIcon>
-                </IonButton>
-              </IonButtons>
-            </IonItem>
+                <IonButtons>
+                  <IonButton fill='clear' color="secondary" size='default'>
+                    <IonIcon icon={pencil}></IonIcon>
+                  </IonButton>
+                  
+                  <IonButton fill="clear" color="danger" size='default'>
+                    <IonIcon icon={trash}></IonIcon>
+                  </IonButton>
+                </IonButtons>
+              </IonItem>
+            ))}
           </IonList>
+          
         </div>
 
         <IonFab slot="fixed" vertical="bottom" horizontal="end">

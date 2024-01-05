@@ -13,6 +13,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { addCircleOutline, people } from 'ionicons/icons';
 import AddGroup from './pages/AddGroup';
 import ListGroups from './pages/ListGroups';
+import UpdateGroup from './pages/UpdateGroup';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -45,6 +46,9 @@ const App: React.FC = () => (
           </Route>
           <Route exact path="/groups">
             <ListGroups />
+          </Route>
+          <Route path="/groups/:groupId">
+            <UpdateGroup />
           </Route>
           <Route exact path="/">
             <Redirect to="/new" />
