@@ -1,19 +1,26 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonNote, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonNote, IonPage, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
 import './ListGroups.css';
 import { pencil, people, trash } from 'ionicons/icons';
 import '../data/types';
 import { getGroups, saveGroups } from '../data';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Empty from '../components/Empty';
 
 const ListGroups: React.FC = () => {
   const [groups, setGroups] = useState<Group[]>([]);
-  useState(() => {
-    (async () =>  {
-      const _groups = await getGroups();
-      setGroups(_groups);
-    })();
+  
+  useEffect(() => {
+    loadGroups();
+  }, []);
+
+  const loadGroups = async () =>  {
+    const _groups = await getGroups();
+    setGroups(_groups);
+  }
+
+  useIonViewWillEnter(() => {
+    loadGroups();
   });
 
   const handleRemoveGroup = async (groupId: number) => {
