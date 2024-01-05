@@ -3,6 +3,7 @@ import { addCircle, pencil, person, save, trash } from 'ionicons/icons';
 import '../data/types';
 import { useEffect, useState } from 'react';
 import { DefaultGroup } from '../data/samples';
+import Empty from './Empty';
 
 interface ContainerProps {
   group: Group
@@ -43,8 +44,11 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
 
           </IonList>
 
+          {/* Show an Empty component when there is no contact in the list ! */}
+          {group.contacts.length === 0 && <Empty />}
+          
           {/* List of the contacts added  */}
-          <IonList inset={true}>
+          {group.contacts.length > 1 && <IonList inset={true}>
             <IonListHeader>
               <IonLabel>Contacts ajoutés</IonLabel>
               <IonButton size='small'>
@@ -67,8 +71,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                 </IonButtons>
               </IonItem>
             ))}
-          </IonList>
-          
+          </IonList>}
         </div>
 
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
