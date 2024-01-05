@@ -1,6 +1,6 @@
 import './types'
 
-const groups:Group[] = [
+export const FakeGroups:Group[] = [
     {
         id: 1,
         name: "Mes amis de classe",
@@ -32,4 +32,9 @@ const groups:Group[] = [
     }
 ]
 
-export default groups; 
+// Default values for a group
+export const DefaultGroup: Group = {
+    id: 0,
+    name: "",
+    contacts: []
+}

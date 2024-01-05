@@ -2,7 +2,7 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabe
 import './ListGroups.css';
 import { pencil, people, trash } from 'ionicons/icons';
 import '../data/types';
-import groups from '../data/samples';
+import { FakeGroups } from '../data/samples';
 import { Link } from 'react-router-dom';
 
 const ListGroups: React.FC = () => {
@@ -29,13 +29,13 @@ const ListGroups: React.FC = () => {
               </IonButton>
             </IonListHeader>
 
-            {groups.map(group => (
-              <IonItem href={`/update/${group.id}`} button detail key={group.id}>
+            {FakeGroups.map(group => (
+              <IonItem href={`/groups/${group.id}`} button detail key={group.id}>
                 <IonIcon color="primary" slot="start" icon={people} size="large"></IonIcon>
                 <IonLabel>{group.name}</IonLabel>
                 
                 <IonButtons>
-                  <Link to={`/update/${group.id}`}>
+                  <Link to={`/groups/${group.id}`}>
                     <IonButton fill='clear' color="secondary" size='default'>
                       <IonIcon icon={pencil}></IonIcon>
                     </IonButton>

@@ -43,7 +43,7 @@ const App: React.FC = () => (
           <Route exact path="/new">
             <AddGroup />
           </Route>
-          <Route exact path="/list">
+          <Route exact path="/groups">
             <ListGroups />
           </Route>
           <Route exact path="/">
@@ -55,7 +55,7 @@ const App: React.FC = () => (
             <IonIcon aria-hidden="true" icon={addCircleOutline} />
             <IonLabel>Nouveau Lot</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="ListGroups" href="/list">
+          <IonTabButton tab="ListGroups" href="/groups">
             <IonIcon aria-hidden="true" icon={people} />
             <IonLabel>Liste des Contacts</IonLabel>
           </IonTabButton>
