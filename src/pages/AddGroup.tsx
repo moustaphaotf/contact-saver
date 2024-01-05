@@ -3,7 +3,7 @@ import './AddGroup.css';
 import '../data/types';
 import GroupManager from '../components/GroupManager';
 
-const Tab1: React.FC = () => {
+const AddGroup: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
@@ -14,7 +14,7 @@ const Tab1: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
+            <IonTitle size="large">Nouveau Lot</IonTitle>
           </IonToolbar>
         </IonHeader>
 
@@ -24,4 +24,4 @@ const Tab1: React.FC = () => {
   );
 };
 
-export default Tab1;
+export default AddGroup;
