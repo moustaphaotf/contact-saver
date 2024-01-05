@@ -2,7 +2,7 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabe
 import './ListGroups.css';
 import { pencil, people, trash } from 'ionicons/icons';
 import '../data/types';
-import { getGroups } from '../data';
+import { getGroups, saveGroups } from '../data';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import Empty from '../components/Empty';
@@ -15,6 +15,12 @@ const ListGroups: React.FC = () => {
       setGroups(_groups);
     })();
   });
+
+  const handleRemoveGroup = async (groupId: number) => {
+    const _groups = groups.filter(group => group.id !== groupId);
+    setGroups(_groups);
+    await saveGroups(_groups)
+  }
 
 
   return (
@@ -45,7 +51,7 @@ const ListGroups: React.FC = () => {
             </IonListHeader>
 
             {groups.map(group => (
-              <IonItem href={`/groups/${group.id}`} button detail key={group.id}>
+              <IonItem  button detail key={group.id}>
                 <IonIcon color="primary" slot="start" icon={people} size="large"></IonIcon>
                 <IonLabel>{group.name}</IonLabel>
                 
@@ -56,7 +62,7 @@ const ListGroups: React.FC = () => {
                     </IonButton>
                   </Link>
                   
-                  <IonButton fill="clear" color="danger" size='default'>
+                  <IonButton onClick={() => handleRemoveGroup(group.id)} fill="clear" color="danger" size='default'>
                     <IonIcon icon={trash}></IonIcon>
                   </IonButton>
                 </IonButtons>
