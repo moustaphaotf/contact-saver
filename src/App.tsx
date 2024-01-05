@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { addCircleOutline, people } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
+import AddGroup from './pages/AddGroup';
 import Tab2 from './pages/Tab2';
 
 /* Core CSS required for Ionic components to work properly */
@@ -41,7 +41,7 @@ const App: React.FC = () => (
       <IonTabs>
         <IonRouterOutlet>
           <Route exact path="/new">
-            <Tab1 />
+            <AddGroup />
           </Route>
           <Route exact path="/list">
             <Tab2 />
@@ -51,7 +51,7 @@ const App: React.FC = () => (
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/new">
+          <IonTabButton tab="AddGroup" href="/new">
             <IonIcon aria-hidden="true" icon={addCircleOutline} />
             <IonLabel>Nouveau Lot</IonLabel>
           </IonTabButton>
