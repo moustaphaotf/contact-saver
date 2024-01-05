@@ -1,11 +1,11 @@
 import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader } from '@ionic/react';
-import { addCircle, pencil, person, save, trash } from 'ionicons/icons';
+import { addCircle, close, pencil, person, save, trash } from 'ionicons/icons';
 import '../data/types';
 import { DefaultContact } from '../data/samples';
 import { useEffect, useState } from 'react';
 import { DefaultGroup } from '../data/samples';
 import Empty from './Empty';
-import { saveGroup, saveGroups } from '../data';
+import { saveGroup } from '../data';
 import { useHistory } from 'react-router';
 
 interface ContainerProps {
@@ -28,7 +28,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
 
   }, [_group]);
 
-  const handleAddContact = () => {
+  const handleContactUpsert = () => {
     // Get the timestamp as the ID
     const id = new Date().getTime();
 
@@ -44,11 +44,17 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
     }
 
 
-    // Set the ID
-    _contact = {...contact, id};
+    _contact = {...contact};
+    if(_contact.id === 0) {
+      // It's a new contact, add it !
+      _contact.id = id;
+      _contacts.unshift(_contact);
+    } else {
+      // It's an update !
+      const index = _contacts.findIndex(c => c.id === _contact.id);
+      _contacts[index] = _contact;
+    }
 
-    // New group contacts
-    _contacts.unshift(_contact);
     
     // Update the group
     setGroup({ ...group, contacts: _contacts});
@@ -88,18 +94,27 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                   value={contact.phone} 
                   type='tel' 
                   labelPlacement="stacked" 
-                  label='Numéro à ajouter' 
+                  label={contact.id === 0 ? 'Numéro': 'Nouveau numéro'} 
                   placeholder='611 000 000'>
                 </IonInput>
-                  <IonButton 
-                    disabled={contact.phone === ""} 
-                    size='large' 
-                    slot='end' 
-                    fill='clear'
-                    onClick={handleAddContact}
-                  >
-                    <IonIcon icon={addCircle}></IonIcon>
-                  </IonButton>
+                  <IonButtons slot='end'>
+                    {contact.id !== 0 && <IonButton 
+                      disabled={contact.phone === ""} 
+                      fill='clear'
+                      onClick={handleContactUpsert}
+                    >
+                      <IonIcon icon={ close }></IonIcon>
+                    </IonButton>}
+                    <IonButton 
+                      color="primary"
+                      disabled={contact.phone === ""} 
+                      size='large' 
+                      fill='clear'
+                      onClick={handleContactUpsert}
+                    >
+                      <IonIcon icon={contact.id === 0 ? addCircle : pencil}></IonIcon>
+                    </IonButton>
+                  </IonButtons>
             </IonItem>
 
           </IonList>
@@ -115,14 +130,22 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                 <IonLabel>Supprimer tout</IonLabel>
               </IonButton>
             </IonListHeader>
-            {group.contacts.map(contact => (
-              <IonItem key={contact.id}>
+            {group.contacts.map(_contact => (
+              <IonItem 
+                button key={_contact.id}
+                onClick={() => setContact(_contact)}
+              >
                 <IonIcon color="primary" slot="start" icon={person} size="large"></IonIcon>
-                <IonLabel>{contact.phone}</IonLabel>
+                <IonLabel>{_contact.phone}</IonLabel>
 
                 <IonButtons>
-                  <IonButton fill='clear' color="secondary" size='default'>
-                    <IonIcon icon={pencil}></IonIcon>
+                  <IonButton 
+                    fill='clear' 
+                    color="secondary" 
+                    size='default'
+                    onClick={() => setContact(_contact)}
+                  >
+                    <IonIcon icon={contact.id !== 0 && _contact.id === contact.id ? close : pencil}></IonIcon>
                   </IonButton>
                   
                   <IonButton fill="clear" color="danger" size='default'>
