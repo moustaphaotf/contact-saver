@@ -9,7 +9,7 @@ import { saveGroup } from '../data';
 import { useHistory } from 'react-router';
 
 interface ContainerProps {
-  group: Group
+  group?: Group
 }
 
 const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }) => {
@@ -66,6 +66,10 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
   const handleSaveGroup = async () => {
     await saveGroup(group);
     history.replace('/groups');
+  }
+
+  const handleRemoveContact = (contactId:number) => {
+    setGroup({ ...group, contacts: group.contacts.filter(c => c.id !== contactId)});
   }
 
   return (
@@ -148,7 +152,12 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                     <IonIcon icon={contact.id !== 0 && _contact.id === contact.id ? close : pencil}></IonIcon>
                   </IonButton>
                   
-                  <IonButton fill="clear" color="danger" size='default'>
+                  <IonButton 
+                    fill="clear" 
+                    color="danger" 
+                    size='default'
+                    onClick={ () => handleRemoveContact(_contact.id) }
+                  >
                     <IonIcon icon={trash}></IonIcon>
                   </IonButton>
                 </IonButtons>
