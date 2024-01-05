@@ -1,4 +1,4 @@
-import { IonButton, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader } from '@ionic/react';
+import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader } from '@ionic/react';
 import { addCircle, pencil, person, save, trash } from 'ionicons/icons';
 import '../data/types';
 
@@ -41,13 +41,16 @@ const GroupManager: React.FC<ContainerProps> = ({ group }) => {
             <IonItem >
               <IonIcon color="primary" slot="start" icon={person} size="large"></IonIcon>
               <IonLabel>+224 625 126 703</IonLabel>
-              <IonButton fill='clear' color="secondary" size='default'>
-                <IonIcon icon={pencil}></IonIcon>
-              </IonButton>
-              
-              <IonButton fill="clear" color="danger" size='default'>
-                <IonIcon icon={trash}></IonIcon>
-              </IonButton>
+
+              <IonButtons>
+                <IonButton fill='clear' color="secondary" size='default'>
+                  <IonIcon icon={pencil}></IonIcon>
+                </IonButton>
+                
+                <IonButton fill="clear" color="danger" size='default'>
+                  <IonIcon icon={trash}></IonIcon>
+                </IonButton>
+              </IonButtons>
             </IonItem>
           </IonList>
         </div>
