@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader } from '@ionic/react';
+import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, useIonRouter } from '@ionic/react';
 import { addCircle, close, pencil, person, save, trash } from 'ionicons/icons';
 import '../data/types';
 import { DefaultContact } from '../data/samples';
@@ -6,14 +6,13 @@ import { useEffect, useState } from 'react';
 import { DefaultGroup } from '../data/samples';
 import Empty from './Empty';
 import { saveGroup } from '../data';
-import { useHistory } from 'react-router';
 
 interface ContainerProps {
   group?: Group
 }
 
 const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }) => {
-  const history = useHistory();
+  const router = useIonRouter();
   const [group, setGroup] = useState<Group>(DefaultGroup);
   const [isNew, setIsNew] = useState(false);
   const [contact, setContact] = useState<Contact>(DefaultContact);
@@ -65,7 +64,8 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
 
   const handleSaveGroup = async () => {
     await saveGroup(group);
-    history.replace('/groups');
+    setGroup(DefaultGroup);
+    router.push('/groups');
   }
 
   const handleRemoveContact = (contactId:number) => {

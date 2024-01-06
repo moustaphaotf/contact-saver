@@ -1,15 +1,15 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonNote, IonPage, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonNote, IonPage, IonTitle, IonToolbar, useIonRouter, useIonViewWillEnter } from '@ionic/react';
 import './ListGroups.css';
 import { pencil, people, trash } from 'ionicons/icons';
 import '../data/types';
 import { getGroups, saveGroups } from '../data';
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Empty from '../components/Empty';
 
 const ListGroups: React.FC = () => {
   const [groups, setGroups] = useState<Group[]>([]);
-  
+  const router = useIonRouter();
+
   useEffect(() => {
     loadGroups();
   }, []);
@@ -58,18 +58,16 @@ const ListGroups: React.FC = () => {
             </IonListHeader>
 
             {groups.map(group => (
-              <IonItem  button detail key={group.id}>
+              <IonItem onClick={() => router.push(`/groups/${group.id}`)}  button detail key={group.id}>
                 <IonIcon color="primary" slot="start" icon={people} size="large"></IonIcon>
                 <IonLabel>{group.name}</IonLabel>
                 
                 <IonButtons>
-                  <Link to={`/groups/${group.id}`}>
                     <IonButton fill='clear' color="secondary" size='default'>
                       <IonIcon icon={pencil}></IonIcon>
                     </IonButton>
-                  </Link>
                   
-                  <IonButton onClick={() => handleRemoveGroup(group.id)} fill="clear" color="danger" size='default'>
+                  <IonButton onClick={(event) => { event.stopPropagation(); handleRemoveGroup(group.id)}} fill="clear" color="danger" size='default'>
                     <IonIcon icon={trash}></IonIcon>
                   </IonButton>
                 </IonButtons>

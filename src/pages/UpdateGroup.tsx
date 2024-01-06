@@ -1,15 +1,15 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonRouter } from '@ionic/react';
 import './UpdateGroup.css';
 import '../data/types';
 import GroupManager from '../components/GroupManager';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { DefaultGroup } from '../data/samples';
 import { useEffect, useState } from 'react';
 import { getGroup } from '../data';
 
 const UpdateGroup: React.FC = () => {
   const {groupId} = useParams<{groupId: string}>();
-  const history = useHistory();
+  const router = useIonRouter();
   const [group, setGroup] = useState<Group>(DefaultGroup);
   
   useEffect(() => {
@@ -18,7 +18,7 @@ const UpdateGroup: React.FC = () => {
       const _group = await getGroup(id)
     
       if(_group === undefined) {
-        history.replace('/groups');
+        router.push('/groups');
         return;
       }
       setGroup(_group as Group);
