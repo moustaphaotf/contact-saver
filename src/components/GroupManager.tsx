@@ -63,7 +63,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
   }
 
   const handleSaveGroup = async () => {
-    await saveGroup(group);
+    await saveGroup({ ...group, id: group.id === 0 ? new Date().getTime() : group.id });
     setGroup(DefaultGroup);
     router.push('/groups');
   }
