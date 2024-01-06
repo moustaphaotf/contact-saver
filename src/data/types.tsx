@@ -9,3 +9,17 @@ interface Group{
     name: string;
     contacts: Contact[];
 }
+
+interface AlertButton {
+    text: string;
+    role?: string;
+    handler?: () => void;
+  }
+
+interface AlertInfos{
+    isOpen: boolean;
+    header: string;
+    subHeader: string;
+    message: string;
+    buttons: string[] | AlertButton[]
+}

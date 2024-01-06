@@ -1,11 +1,12 @@
 import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, useIonRouter } from '@ionic/react';
 import { addCircle, close, pencil, person, save, trash } from 'ionicons/icons';
 import '../data/types';
-import { DefaultContact } from '../data/samples';
+import { DefaultContact, DefaultAlertInfos } from '../data/samples';
 import { useEffect, useState } from 'react';
 import { DefaultGroup } from '../data/samples';
 import Empty from './Empty';
 import { saveGroup } from '../data';
+import Modal from './Alert';
 
 interface ContainerProps {
   group?: Group
@@ -13,6 +14,7 @@ interface ContainerProps {
 
 const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }) => {
   const router = useIonRouter();
+  const [alertInfos, setAlertInfos] = useState<AlertInfos>(DefaultAlertInfos);
   const [group, setGroup] = useState<Group>(DefaultGroup);
   const [isNew, setIsNew] = useState(false);
   const [contact, setContact] = useState<Contact>(DefaultContact);
@@ -39,6 +41,11 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
     if(_contacts.some(c => c.phone == _contact.phone)) {
       // If so, drop
       setContact(DefaultContact);
+      setAlertInfos({
+        ...alertInfos, 
+        isOpen: true,
+        message: "Ce contact est déjà ajouté!"
+      });
       return;
     }
 
@@ -64,16 +71,49 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
 
   const handleSaveGroup = async () => {
     if(group.name === "") {
-      // Abort the process
+      // Abort the process if the name is not submitted
+      setAlertInfos({
+        ...alertInfos, 
+        isOpen: true,
+        message: "Saisissez le nom du groupe!"
+      });
       return;
     }
+
+    if(group.contacts.length === 0 && group.id === 0) {
+      setAlertInfos({
+        ...alertInfos, 
+        isOpen: true,
+        message: "Ajoutez au moins un contact!"
+      });
+      return;
+    }
+
     await saveGroup({ ...group, id: group.id === 0 ? new Date().getTime() : group.id });
     setGroup(DefaultGroup);
     router.push('/groups');
   }
 
   const handleRemoveContact = (contactId:number) => {
-    setGroup({ ...group, contacts: group.contacts.filter(c => c.id !== contactId)});
+    setAlertInfos({
+      ...alertInfos, 
+      isOpen: true,
+      message: "Voulez-vous supprimer le contact ?",
+      buttons: [
+        {
+          text: "Oui",
+          role: "destructive",
+          handler: () => {
+            setContact(DefaultContact);
+            setGroup({ ...group, contacts: group.contacts.filter(c => c.id !== contactId)});
+          }
+        }, 
+        {
+          text: "Non",
+          role: "cancel"
+        }
+      ]
+    });
   }
 
   return (
@@ -169,7 +209,11 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
             ))}
           </IonList>}
         </div>
+        {/* The modal for alerts */}
+        <Modal params={alertInfos} setParams={setAlertInfos}/>
 
+
+        {/* The save group button */}
         <IonFab 
           slot="fixed" 
           vertical="bottom" 

@@ -45,3 +45,12 @@ export const DefaultContact: Contact = {
     phone: "",
     fullname: ""
 }
+
+// Default values for a modal
+export const DefaultAlertInfos: AlertInfos = {
+    message: "",
+    isOpen: false,
+    header: "",
+    subHeader: "",
+    buttons: ["OK"],
+}

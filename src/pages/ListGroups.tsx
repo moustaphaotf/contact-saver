@@ -5,9 +5,12 @@ import '../data/types';
 import { getGroups, saveGroups } from '../data';
 import { useEffect, useState } from 'react';
 import Empty from '../components/Empty';
+import Alert from '../components/Alert';
+import { DefaultAlertInfos } from '../data/samples';
 
 const ListGroups: React.FC = () => {
   const [groups, setGroups] = useState<Group[]>([]);
+  const [alertInfos, setAlertInfos] = useState<AlertInfos>(DefaultAlertInfos);
   const router = useIonRouter();
 
   useEffect(() => {
@@ -24,9 +27,26 @@ const ListGroups: React.FC = () => {
   });
 
   const handleRemoveGroup = async (groupId: number) => {
-    const _groups = groups.filter(group => group.id !== groupId);
-    setGroups(_groups);
-    await saveGroups(_groups)
+    setAlertInfos({
+      ...alertInfos, 
+      isOpen: true,
+      message: "Voulez-vous supprimer le groupe ?",
+      buttons: [
+        {
+          text: "Oui",
+          role: "destructive",
+          handler: async () => {
+            const _groups = groups.filter(group => group.id !== groupId);
+            setGroups(_groups);
+            await saveGroups(_groups)
+          }
+        }, 
+        {
+          text: "Non",
+          role: "cancel"
+        }
+      ]
+    });
   }
 
 
@@ -77,6 +97,7 @@ const ListGroups: React.FC = () => {
           </IonList>}
 
         </div>
+        <Alert params={alertInfos} setParams={setAlertInfos} />
       </IonContent>
     </IonPage>
   );
