@@ -38,7 +38,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
 
     // Check if the contact already exists
     const _contacts = [...group.contacts];
-    if(_contacts.some(c => c.phone == _contact.phone)) {
+    if(contact.id === 0 && _contacts.some(c => c.phone == _contact.phone)) {
       // If so, drop
       setContact(DefaultContact);
       
