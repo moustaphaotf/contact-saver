@@ -5,12 +5,10 @@ import '../data/types';
 import { ContactsAPI, getGroups, saveGroups } from '../data';
 import { useEffect, useState } from 'react';
 import Empty from '../components/Empty';
-import Alert from '../components/Alert';
-import { DefaultAlertInfos } from '../data/samples';
+import { Dialog } from '@capacitor/dialog';
 
 const ListGroups: React.FC = () => {
   const [groups, setGroups] = useState<Group[]>([]);
-  const [alertInfos, setAlertInfos] = useState<AlertInfos>(DefaultAlertInfos);
   const router = useIonRouter();
 
   useEffect(() => {
@@ -27,31 +25,21 @@ const ListGroups: React.FC = () => {
   });
 
   const handleRemoveGroup = async (group: Group) => {
-    setAlertInfos({
-      ...alertInfos, 
-      isOpen: true,
-      message: "Voulez-vous supprimer le groupe ?",
-      buttons: [
-        {
-          text: "Oui",
-          role: "destructive",
-          handler: async () => {
-            // Remove from state
-            const _groups = groups.filter(_group => _group.id !== group.id);
-
-            // Remove from user's system
-            ContactsAPI.remove(group);
-
-            setGroups(_groups);
-            await saveGroups(_groups)
-          }
-        }, 
-        {
-          text: "Non",
-          role: "cancel"
-        }
-      ]
+    const { value } = await Dialog.confirm({
+      title: "Suppression de groupe",
+      message: "Voulez-vous supprimer le groupe ?"
     });
+
+    if(value) {
+      // Remove from state
+      const _groups = groups.filter(_group => _group.id !== group.id);
+  
+      // Remove from user's system
+      ContactsAPI.remove(group);
+  
+      setGroups(_groups);
+      await saveGroups(_groups)
+    }
   }
 
 
@@ -102,7 +90,6 @@ const ListGroups: React.FC = () => {
           </IonList>}
 
         </div>
-        <Alert params={alertInfos} setParams={setAlertInfos} />
       </IonContent>
     </IonPage>
   );
