@@ -235,7 +235,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                     size='default'
                     onClick={(event) => {
                       event.stopPropagation();
-                      setContact(contact.id === 0 ? _contact : DefaultContact);
+                      setContact(contact.id !== 0 && contact.id === _contact.id ? DefaultContact : _contact);
                     }}
                   >
                     <IonIcon icon={contact.id !== 0 && _contact.id === contact.id ? close : pencil}></IonIcon>
