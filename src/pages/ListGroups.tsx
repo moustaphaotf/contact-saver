@@ -65,9 +65,6 @@ const ListGroups: React.FC = () => {
           { groups.length > 0 && <IonList inset={true}>
             <IonListHeader>
               <IonLabel>Groupes ajoutés</IonLabel>
-              <IonButton size='small'>
-                <IonLabel>Supprimer tout</IonLabel>
-              </IonButton>
             </IonListHeader>
 
             {groups.map(group => (

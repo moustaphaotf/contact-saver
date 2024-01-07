@@ -1,5 +1,5 @@
 import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, useIonRouter, IonCard, IonCardHeader,IonCardSubtitle} from '@ionic/react';
-import { addCircle, close, pencil, person, save, trash } from 'ionicons/icons';
+import { addCircle, close, pencil, person, save, trash, reload} from 'ionicons/icons';
 import '../data/types';
 import { DefaultContact } from '../data/samples';
 import { useEffect, useState } from 'react';
@@ -218,11 +218,27 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
           
           {/* List of the contacts added  */}
           {group.contacts.length > 0 && <IonList inset={true}>
-            <IonListHeader>
+            <IonListHeader lines={"full"} style={{ marginBottom: "1rem"}}>
               <IonLabel>Contacts ajoutés</IonLabel>
-              <IonButton size='small'>
-                <IonLabel>Supprimer tout</IonLabel>
-              </IonButton>
+              <IonButtons>
+                <IonButton 
+                  onClick={async() => {
+                    const { value } = await Dialog.confirm({
+                      message: "Voulez-vous annuler les changements ?",
+                      title: "Annuler les modifications"
+                    });
+
+                    if(value) {
+                      setGroup(_group);
+                      setContact(DefaultContact);
+                    }
+                  }} 
+                  color={'success'} 
+                  size={'large'}
+                >  
+                  <IonIcon icon={reload}></IonIcon>
+                </IonButton>
+              </IonButtons>
             </IonListHeader>
             {group.contacts.map(_contact => (
               <IonItem 
