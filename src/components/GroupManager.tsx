@@ -7,6 +7,7 @@ import { DefaultGroup } from '../data/samples';
 import Empty from './Empty';
 import { saveGroup } from '../data';
 import Modal from './Alert';
+import { Contacts } from '@capacitor-community/contacts';
 
 interface ContainerProps {
   group?: Group
@@ -89,9 +90,35 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
       return;
     }
 
-    await saveGroup({ ...group, id: group.id === 0 ? new Date().getTime() : group.id });
-    setGroup(DefaultGroup);
-    router.push('/groups');
+    // Set the group to prevent multiple saves !
+    const _group = { ...group, id: group.id === 0 ? new Date().getTime() : group.id };
+    setGroup(_group);
+
+    // Check for the permissions
+    let status = await Contacts.checkPermissions()
+    if(status.contacts !== 'granted') {
+      setAlertInfos({
+        ...DefaultAlertInfos,
+        buttons: ["OK"],
+        isOpen: true,
+        message: "Veuillez autoriser l'application à accéder aux contacts du téléphone !\n\nApps -> Batch Contact Saver -> Permissions",
+      });
+
+    } else {
+      const res = await saveGroup(_group);
+
+      if(!res) {
+        setAlertInfos({
+          ...DefaultAlertInfos,
+          isOpen: true,
+          buttons: ["OK"],
+          message: "Une erreur est survenue !",
+        });
+      } else {
+        setGroup(DefaultGroup);
+        router.push('/groups');
+      }
+    }
   }
 
   const handleRemoveContact = (contactId:number) => {
