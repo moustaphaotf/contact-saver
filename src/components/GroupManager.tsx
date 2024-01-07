@@ -168,32 +168,44 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
           <IonList inset={true}>
             {/* Form to add contacts to the list*/}
             <IonItem>
-                <IonInput 
-                  onIonInput={event => setContact({ ...contact, phone: event.target.value as string})} 
-                  value={contact.phone} 
-                  type='tel' 
-                  labelPlacement="stacked" 
-                  label={contact.id === 0 ? 'Numéro': 'Nouveau numéro'} 
-                  placeholder='611 000 000'>
-                </IonInput>
-                  <IonButtons slot='end'>
-                    {contact.id !== 0 && <IonButton 
-                      disabled={contact.phone === ""} 
-                      fill='clear'
-                      onClick={() => setContact(DefaultContact)}
-                    >
-                      <IonIcon icon={ close }></IonIcon>
-                    </IonButton>}
-                    <IonButton 
-                      color="primary"
-                      disabled={contact.phone === ""} 
-                      size='large' 
-                      fill='clear'
-                      onClick={handleContactUpsert}
-                    >
-                      <IonIcon icon={contact.id === 0 ? addCircle : pencil}></IonIcon>
-                    </IonButton>
-                  </IonButtons>
+              <IonInput 
+                onIonInput={event => setContact({ ...contact, phone: event.target.value as string})} 
+                value={contact.phone} 
+                type='tel' 
+                labelPlacement="stacked" 
+                label={contact.id === 0 ? 'Numéro': 'Nouveau numéro'} 
+                placeholder='611 000 000'>
+              </IonInput>
+            </IonItem>
+
+            <IonItem>
+              <IonInput 
+                onIonInput={event => setContact({ ...contact, fullname: event.target.value as string})} 
+                value={contact.fullname} 
+                labelPlacement="stacked" 
+                label={contact.id === 0 ? 'Nom complet': 'Nouveau nom'} 
+                placeholder='Mamadou Diallo'>
+              </IonInput>
+            </IonItem>
+            <IonItem>
+              <IonButtons slot='end'>
+                {contact.id !== 0 && <IonButton 
+                  disabled={contact.phone === ""} 
+                  fill='clear'
+                  onClick={() => setContact(DefaultContact)}
+                >
+                  <IonIcon icon={ close }></IonIcon>
+                </IonButton>}
+                <IonButton 
+                  color="primary"
+                  disabled={contact.phone === ""} 
+                  size='large' 
+                  fill='clear'
+                  onClick={handleContactUpsert}
+                >
+                  <IonIcon icon={contact.id === 0 ? addCircle : pencil}></IonIcon>
+                </IonButton>
+              </IonButtons>
             </IonItem>
 
           </IonList>
@@ -215,8 +227,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                 onClick={() => setContact(_contact)}
               >
                 <IonIcon color="primary" slot="start" icon={person} size="large"></IonIcon>
-                <IonLabel>{_contact.phone}</IonLabel>
-
+                <IonLabel>{_contact.phone} (<strong>{ _contact.fullname === "" ? "N/A" : _contact.fullname}</strong>)</IonLabel>
                 <IonButtons>
                   <IonButton 
                     fill='clear' 
