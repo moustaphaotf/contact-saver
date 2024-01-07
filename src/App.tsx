@@ -57,7 +57,7 @@ const App: React.FC = () => (
         <IonTabBar slot="bottom">
           <IonTabButton tab="AddGroup" href="/new">
             <IonIcon aria-hidden="true" icon={addCircleOutline} />
-            <IonLabel>Nouveau Lot</IonLabel>
+            <IonLabel>Nouveau Groupe</IonLabel>
           </IonTabButton>
           <IonTabButton tab="ListGroups" href="/groups">
             <IonIcon aria-hidden="true" icon={people} />

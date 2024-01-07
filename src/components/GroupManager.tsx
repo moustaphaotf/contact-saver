@@ -160,7 +160,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                 type='text' 
                 labelPlacement="stacked" 
                 label='Nom du groupe' 
-                placeholder='mes amis de classe'
+                placeholder='Dev 2.0'
               ></IonInput>
             </IonItem>
           </IonList>

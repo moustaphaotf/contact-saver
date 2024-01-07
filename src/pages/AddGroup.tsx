@@ -8,13 +8,13 @@ const AddGroup: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Nouveau Lot</IonTitle>
+          <IonTitle>Nouveau Groupe</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Nouveau Lot</IonTitle>
+            <IonTitle size="large">Nouveau Groupe</IonTitle>
           </IonToolbar>
         </IonHeader>
 

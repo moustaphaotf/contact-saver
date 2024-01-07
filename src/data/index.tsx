@@ -35,7 +35,8 @@ export async function getGroup(id: number) : Promise<Group | undefined> {
                 try {
                     await Contacts.getContact({ contactId: contact._id as string, projection: { name: true }});
                 } catch(error:any) {
-                    console.error("Oh oh ... The user has deleted this contact by herself !", contact)
+                    console.error("Oh oh ... could not get this contact", contact)
+                    console.error(error.message);
                     contact._id = undefined;
                 }
             })
