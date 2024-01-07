@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, useIonRouter } from '@ionic/react';
+import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, useIonRouter, IonCard, IonCardHeader,IonCardSubtitle} from '@ionic/react';
 import { addCircle, close, pencil, person, save, trash } from 'ionicons/icons';
 import '../data/types';
 import { DefaultContact } from '../data/samples';
@@ -150,7 +150,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
   return (
     <>
         <div>
-          <IonList inset={true}>
+          <IonCard style={ { marginTop: "1rem" } }>
             {/* The group name */}
             <IonItem>
               <IonInput 
@@ -163,9 +163,12 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                 placeholder='Dev 2.0'
               ></IonInput>
             </IonItem>
-          </IonList>
+          </IonCard>
 
-          <IonList inset={true}>
+          <IonCard  style={ { marginTop: "1rem" } }>
+            <IonCardHeader>
+            <IonCardSubtitle>Informations du Contact</IonCardSubtitle>
+            </IonCardHeader>
             {/* Form to add contacts to the list*/}
             <IonItem>
               <IonInput 
@@ -208,7 +211,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
               </IonButtons>
             </IonItem>
 
-          </IonList>
+          </IonCard>
 
           {/* Show an Empty component when there is no contact in the list ! */}
           {group.contacts.length === 0 && <Empty message='Ajoutez des contacts !' />}
