@@ -1,5 +1,6 @@
 import { Preferences } from "@capacitor/preferences";
 import './types'
+import { Contacts, PhoneType } from "@capacitor-community/contacts";
 
 const GROUP_KEY = "BCS_SAVED_GROUPS"
 
@@ -28,7 +29,17 @@ export async function getGroup(id: number) : Promise<Group | undefined> {
         } else {
             const json = atob(_groupsBase64);
             const groups:Group[] = JSON.parse(json);
-            return groups.find(group => group.id === id);
+            const group = groups.find(group => group.id === id);
+            
+            group?.contacts.forEach(async (contact) => {
+                try {
+                    await Contacts.getContact({ contactId: contact._id as string, projection: { name: true }});
+                } catch(error:any) {
+                    console.error("Oh oh ... The user has deleted this contact by herself !", contact)
+                    contact._id = undefined;
+                }
+            })
+            return group;
         }
     } catch (error:any) {
         console.error(error.message);
@@ -45,6 +56,10 @@ export async function saveGroup(group:Group){
     // If the group exist
     const index = groups.findIndex(_group => _group.id === group.id);
     
+    // Save the group first to the system
+    // That way the contacts will get updated with their _id if they get saved
+    const status = await ContactsAPI.save(group);
+
     if(index === -1) {
         // The group does not exist then add it !
         groups.unshift(group);
@@ -54,6 +69,69 @@ export async function saveGroup(group:Group){
         groups[index] = group;
     }
 
-    // Then save !
+    // Then save to the local db !
     await saveGroups(groups);
+    return status;
+}
+
+
+export class ContactsAPI {
+    // For permissions maybe ?
+    static async save(group: Group) {
+        let error = false; // Flag to check for a potential error !
+
+        // Save the contats
+        for(let contact of group.contacts) {
+            // Before creating the contact, let's check if it may exist
+            if(contact._id !== undefined) {
+                try {     
+                    // The contact may exist delete it first    
+                    console.log("The contact", contact, "exists.\nDeleting...")
+                    await Contacts.deleteContact({contactId: contact._id as string});
+                } catch (error) {
+                    console.error("Unable to delete contact !", contact);
+                }
+            }
+    
+            // Then create it (or recreate)
+            try{
+                const res = await Contacts.createContact({
+                    contact: {
+                        name: {
+                            given: group.name,
+                            family: contact.fullname,
+                        },
+                        phones: [
+                            {
+                                type: PhoneType.Mobile,
+                                label: "mobile",
+                                number: contact.phone
+                            }
+                        ]
+                    }
+                });
+    
+                // Affect the contactId for future retrieval
+                contact._id = res.contactId;
+                console.log("Contact", contact, "saved with id", contact._id);
+            } catch (err: any) {
+                error = true;
+                console.error("Unable to create the contact !", contact);
+            }
+        }
+
+        return !error;
+    }
+
+    static remove(group: Group) {
+        group.contacts.forEach(async (contact) => {
+            try {
+                await Contacts.deleteContact({ contactId: contact._id as string });
+                console.log("Contact", contact, "has been deleted !");
+            } catch(error:any) {
+                console.error("Oh oh ... The user has deleted this contact by herself !", contact)
+                contact._id = undefined;
+            }
+        })
+    }
 }

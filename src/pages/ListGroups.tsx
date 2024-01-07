@@ -2,7 +2,7 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabe
 import './ListGroups.css';
 import { pencil, people, trash } from 'ionicons/icons';
 import '../data/types';
-import { getGroups, saveGroups } from '../data';
+import { ContactsAPI, getGroups, saveGroups } from '../data';
 import { useEffect, useState } from 'react';
 import Empty from '../components/Empty';
 import Alert from '../components/Alert';
@@ -26,7 +26,7 @@ const ListGroups: React.FC = () => {
     loadGroups();
   });
 
-  const handleRemoveGroup = async (groupId: number) => {
+  const handleRemoveGroup = async (group: Group) => {
     setAlertInfos({
       ...alertInfos, 
       isOpen: true,
@@ -36,7 +36,12 @@ const ListGroups: React.FC = () => {
           text: "Oui",
           role: "destructive",
           handler: async () => {
-            const _groups = groups.filter(group => group.id !== groupId);
+            // Remove from state
+            const _groups = groups.filter(_group => _group.id !== group.id);
+
+            // Remove from user's system
+            ContactsAPI.remove(group);
+
             setGroups(_groups);
             await saveGroups(_groups)
           }
@@ -87,7 +92,7 @@ const ListGroups: React.FC = () => {
                       <IonIcon icon={pencil}></IonIcon>
                     </IonButton>
                   
-                  <IonButton onClick={(event) => { event.stopPropagation(); handleRemoveGroup(group.id)}} fill="clear" color="danger" size='default'>
+                  <IonButton onClick={(event) => { event.stopPropagation(); handleRemoveGroup(group)}} fill="clear" color="danger" size='default'>
                     <IonIcon icon={trash}></IonIcon>
                   </IonButton>
                 </IonButtons>
