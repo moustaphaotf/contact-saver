@@ -180,7 +180,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                     {contact.id !== 0 && <IonButton 
                       disabled={contact.phone === ""} 
                       fill='clear'
-                      onClick={handleContactUpsert}
+                      onClick={() => setContact(DefaultContact)}
                     >
                       <IonIcon icon={ close }></IonIcon>
                     </IonButton>}
@@ -222,7 +222,10 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                     fill='clear' 
                     color="secondary" 
                     size='default'
-                    onClick={() => setContact(_contact)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setContact(contact.id === 0 ? _contact : DefaultContact);
+                    }}
                   >
                     <IonIcon icon={contact.id !== 0 && _contact.id === contact.id ? close : pencil}></IonIcon>
                   </IonButton>
