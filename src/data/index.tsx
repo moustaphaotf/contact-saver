@@ -53,13 +53,9 @@ export async function saveGroups(groups: Group[]) {
 
 export async function saveGroup(group:Group){
     const groups = await getGroups();
+
     // If the group exist
     const index = groups.findIndex(_group => _group.id === group.id);
-    
-    // Save the group first to the system
-    // That way the contacts will get updated with their _id if they get saved
-    const status = await ContactsAPI.save(group);
-
     if(index === -1) {
         // The group does not exist then add it !
         groups.unshift(group);
@@ -71,7 +67,6 @@ export async function saveGroup(group:Group){
 
     // Then save to the local db !
     await saveGroups(groups);
-    return status;
 }
 
 

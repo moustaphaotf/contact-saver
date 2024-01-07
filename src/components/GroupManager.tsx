@@ -5,7 +5,7 @@ import { DefaultContact } from '../data/samples';
 import { useEffect, useState } from 'react';
 import { DefaultGroup } from '../data/samples';
 import Empty from './Empty';
-import { saveGroup } from '../data';
+import { ContactsAPI, saveGroup } from '../data';
 import { Dialog } from '@capacitor/dialog';
 import { Contacts } from '@capacitor-community/contacts';
 
@@ -69,14 +69,14 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
     setContact(DefaultContact);
   }
 
-  const handleSaveGroup = async () => {
+  const isDataValid = async () => {
     if(group.name === "") {
       // Abort the process if the name is not submitted
       await Dialog.alert({
         title: "Informations manquantes",
         message: "Saisissez le nom du groupe!"
       });
-      return;
+      return false;
     }
 
     if(group.contacts.length === 0 && group.id === 0) {
@@ -84,6 +84,14 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
         title: "Informations manquantes",
         message: "Ajoutez au moins un groupe!"
       });
+      return false;
+    }
+
+    return true;
+  }
+
+  const handleSaveGroup = async () => {
+    if(!(await isDataValid())) {
       return;
     }
 
@@ -91,25 +99,38 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
     const _group = { ...group, id: group.id === 0 ? new Date().getTime() : group.id };
     setGroup(_group);
 
-    // Check for the permissions
-    let status = await Contacts.checkPermissions()
-    if(status.contacts !== 'granted') {
-      await Dialog.alert({
-        title: "Permissions requises",
-        message: "Veuillez autoriser l'application à accéder aux contacts du téléphone !\n\nApps -> Batch Contact Saver -> Permissions"
-      });
-    } else {
-      const res = await saveGroup(_group);
+    try {
+      // Check for the permissions
+      let status = await Contacts.checkPermissions();
+      
+      if(status.contacts !== "granted") {
+        await Dialog.alert({
+          title: "Permissions requises",
+          message: "Veuillez autoriser l'application à accéder aux contacts du téléphone !\n\nApps -> Batch Contact Saver -> Permissions"
+        });
+    
+        return;
+      }
 
+
+      // Save the group first to the system
+      // That way the contacts will get updated with their _id if they get saved
+      const res = await ContactsAPI.save(group);
       if(!res) {
         Dialog.alert({
           title: "Erreur interne",
           message: "Une erreur est survenue lors de l'enregistrement!"
         });
-      } else {
-        setGroup(DefaultGroup);
-        router.push('/groups');
+  
+        return;
       }
+
+    } catch(error: any) {
+      console.error(error.message);
+    } finally {
+      saveGroup(_group);
+      setContact(DefaultContact);
+      router.push('/groups');
     }
   }
 
