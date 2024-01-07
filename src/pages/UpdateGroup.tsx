@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonRouter } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonRouter, useIonViewWillEnter } from '@ionic/react';
 import './UpdateGroup.css';
 import '../data/types';
 import GroupManager from '../components/GroupManager';
@@ -13,17 +13,23 @@ const UpdateGroup: React.FC = () => {
   const [group, setGroup] = useState<Group>(DefaultGroup);
   
   useEffect(() => {
-    (async () => {
-      const id = Number(groupId);
-      const _group = await getGroup(id)
-    
-      if(_group === undefined) {
-        router.push('/groups');
-        return;
-      }
-      setGroup(_group as Group);
-    })();
+    loadGroup();
   }, []);
+
+  useIonViewWillEnter(() => {
+    loadGroup();
+  });
+
+  const loadGroup = async () => {
+    const id = Number(groupId);
+    const _group = await getGroup(id)
+  
+    if(_group === undefined) {
+      router.push('/groups');
+      return;
+    }
+    setGroup(_group as Group);
+  }
   
   return (
     <IonPage>
