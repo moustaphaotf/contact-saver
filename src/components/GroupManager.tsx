@@ -82,7 +82,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
     if(group.contacts.length === 0 && group.id === 0) {
       await Dialog.alert({
         title: "Informations manquantes",
-        message: "Ajoutez au moins un groupe!"
+        message: "Ajoutez au moins un contact!"
       });
       return false;
     }
