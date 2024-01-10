@@ -1,6 +1,6 @@
 import { Preferences } from "@capacitor/preferences";
 import './types'
-import { Contacts, PhoneType } from "@capacitor-community/contacts";
+import { Contacts, NameInput, PhoneType } from "@capacitor-community/contacts";
 
 const GROUP_KEY = "BCS_SAVED_GROUPS"
 
@@ -91,11 +91,13 @@ export class ContactsAPI {
     
             // Then create it (or recreate)
             try{
+                const fullnameGiven = contact.fullname !== "";
+
                 const res = await Contacts.createContact({
                     contact: {
                         name: {
-                            given: group.name,
-                            family: contact.fullname,
+                            given: fullnameGiven ? contact.fullname : group.name,
+                            suffix: fullnameGiven ? group.name : "",
                         },
                         phones: [
                             {
