@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonItem, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './AddGroup.css';
 import '../data/types';
 import GroupManager from '../components/GroupManager';
@@ -17,7 +17,9 @@ const AddGroup: React.FC = () => {
             <IonTitle size="large">Nouveau Groupe</IonTitle>
           </IonToolbar>
         </IonHeader>
-
+        <IonItem>
+          
+        </IonItem>
         <GroupManager />
       </IonContent>
     </IonPage>
