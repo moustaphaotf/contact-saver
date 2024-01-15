@@ -16,17 +16,10 @@ interface ContainerProps {
 const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }) => {
   const router = useIonRouter();
   const [group, setGroup] = useState<Group>(DefaultGroup);
-  const [isNew, setIsNew] = useState(false);
   const [contact, setContact] = useState<Contact>(DefaultContact);
 
   useEffect(() => {
-    // Load group infos from props when it's in update mode
-    const _isNew = _group === undefined;
-    setIsNew(_isNew);
-    if(!isNew) {
       setGroup(_group);
-    }
-
   }, [_group]);
 
   const handleContactUpsert = async () => {
@@ -271,6 +264,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                 </IonButtons>
               </IonItem>
             ))}
+            <IonItem></IonItem>
           </IonList>}
         </div>
 
