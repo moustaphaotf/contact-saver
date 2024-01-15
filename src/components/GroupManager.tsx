@@ -264,6 +264,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                 </IonButtons>
               </IonItem>
             ))}
+            <IonItem></IonItem>
           </IonList>}
         </div>
 
