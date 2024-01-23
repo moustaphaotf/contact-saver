@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './AddGroup.css';
 import '../data/types';
 import GroupManager from '../components/GroupManager';
@@ -7,6 +7,7 @@ import { FilePicker } from '@capawesome/capacitor-file-picker';
 import { Dialog } from '@capacitor/dialog';
 import { useState } from 'react';
 import { DefaultGroup } from '../data/samples';
+import { parseCSV } from '../functions';
 
 const AddGroup: React.FC = () => {
   const [group, setGroup] = useState(DefaultGroup);
@@ -14,8 +15,9 @@ const AddGroup: React.FC = () => {
   const pickFile = async () => {
     try {
       const result = await FilePicker.pickFiles({
-        types: ['text/csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+        types: ['text/csv'],
         readData: true,
+        
       });
   
       return result.files[0];
@@ -24,19 +26,20 @@ const AddGroup: React.FC = () => {
     }
   }
 
-  const csv2json = (csv: string) => {
-    const arr = csv.split('\n');
+  const getContacts = (csv: string) => {
+    const arr = parseCSV(csv);
     arr.splice(0, 1); // Remove the first row
 
     const contacts: Contact[] = [];
 
     arr.forEach(row => {
-      const fields = row.split(';');
-
+      if(row[1] === undefined || !/^\+?(\d| )*$/.test(row[1])) {
+        return;
+      }
       const c: Contact = {
         id: new Date().getTime() + Math.ceil(Math.random() * 10000),
-        phone: fields[1].trim(),
-        fullname: fields[0].trim(),
+        phone: row[1].trim().split(' ').join(''),
+        fullname: row[0].trim() || "",
       }
 
       contacts.push(c);
@@ -61,7 +64,7 @@ const AddGroup: React.FC = () => {
     }
 
     // Convertir les données en JSON
-    const contacts = csv2json(atob(file.data as string));
+    const contacts = getContacts(atob(file.data as string));
     if(contacts.length === 0) {
       await Dialog.alert( { message: "Les données du fichier ne sont pas bien formatées !" } );
       return;

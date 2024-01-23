@@ -31,7 +31,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
 
     // Check if the contact already exists
     const _contacts = [...group.contacts];
-    if(contact.id === 0 && _contacts.some(c => c.phone == _contact.phone)) {
+    if(contact.id === DefaultContact.id && _contacts.some(c => c.phone == _contact.phone)) {
       // If so, drop
       setContact(DefaultContact);
       
@@ -44,7 +44,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
 
 
     _contact = {...contact};
-    if(_contact.id === 0) {
+    if(_contact.id === DefaultContact.id) {
       // It's a new contact, add it !
       _contact.id = id;
       _contacts.unshift(_contact);
@@ -72,7 +72,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
       return false;
     }
 
-    if(group.contacts.length === 0 && group.id === 0) {
+    if(group.contacts.length === 0 && group.id === DefaultGroup.id) {
       await Dialog.alert({
         title: "Informations manquantes",
         message: "Ajoutez au moins un contact!"
@@ -89,7 +89,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
     }
 
     // Set the group to prevent multiple saves !
-    const _group = { ...group, id: group.id === 0 ? new Date().getTime() : group.id };
+    const _group = { ...group, id: group.id === DefaultGroup.id ? new Date().getTime() : group.id };
     setGroup(_group);
 
     try {
@@ -169,7 +169,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                 value={contact.phone} 
                 type='tel' 
                 labelPlacement="stacked" 
-                label={contact.id === 0 ? 'Numéro': 'Nouveau numéro'} 
+                label={contact.id === DefaultContact.id ? 'Numéro': 'Nouveau numéro'} 
                 placeholder='611 000 000'>
               </IonInput>
             </IonItem>
@@ -179,7 +179,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                 onIonInput={event => setContact({ ...contact, fullname: event.target.value as string})} 
                 value={contact.fullname} 
                 labelPlacement="stacked" 
-                label={contact.id === 0 ? 'Nom complet': 'Nouveau nom'} 
+                label={contact.id === DefaultContact.id ? 'Nom complet': 'Nouveau nom'} 
                 placeholder='Mamadou Diallo'>
               </IonInput>
             </IonItem>
@@ -199,7 +199,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                   fill='clear'
                   onClick={handleContactUpsert}
                 >
-                  <IonIcon icon={contact.id === 0 ? addCircle : pencil}></IonIcon>
+                  <IonIcon icon={contact.id === DefaultContact.id ? addCircle : pencil}></IonIcon>
                 </IonButton>
               </IonButtons>
             </IonItem>
@@ -222,7 +222,8 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                     });
 
                     if(value) {
-                      setGroup(_group);
+                      // If the group was imported set DefaultGroup otherwise set _group
+                      setGroup(group.id === DefaultGroup.id ? DefaultGroup : _group);
                       setContact(DefaultContact);
                     }
                   }} 
