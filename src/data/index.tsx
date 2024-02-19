@@ -1,6 +1,6 @@
 import { Preferences } from "@capacitor/preferences";
 import './types'
-import { Contacts, NameInput, PhoneType } from "@capacitor-community/contacts";
+import { Contacts, PhoneType } from "@capacitor-community/contacts";
 
 const GROUP_KEY = "BCS_SAVED_GROUPS"
 
@@ -75,6 +75,7 @@ export class ContactsAPI {
     // For permissions maybe ?
     static async save(group: Group) {
         let error = false; // Flag to check for a potential error !
+        let count = 0; // The number of contacts that have been saved
 
         // Save the contats
         for(let contact of group.contacts) {
@@ -88,6 +89,7 @@ export class ContactsAPI {
                     console.error("Unable to delete contact !", contact);
                 }
             }
+
     
             // Then create it (or recreate)
             try{
@@ -112,13 +114,14 @@ export class ContactsAPI {
                 // Affect the contactId for future retrieval
                 contact._id = res.contactId;
                 console.log("Contact", contact, "saved with id", contact._id);
+                count++;
             } catch (err: any) {
                 error = true;
                 console.error("Unable to create the contact !", contact);
             }
         }
 
-        return !error;
+        return { status: !error, count: count };
     }
 
     static remove(group: Group) {
