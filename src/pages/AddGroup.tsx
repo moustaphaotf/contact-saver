@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import './AddGroup.css';
 import '../data/types';
 import GroupManager from '../components/GroupManager';
@@ -11,6 +11,7 @@ import { parseCSV } from '../functions';
 
 const AddGroup: React.FC = () => {
   const [group, setGroup] = useState(DefaultGroup);
+  const [present, dismiss] = useIonLoading();
 
   const pickFile = async () => {
     try {
@@ -49,16 +50,22 @@ const AddGroup: React.FC = () => {
   }
 
   const importContacts = async () => {
+    // Show content loader
+    present('Chargement en cours ...');
+
+
     const file = await pickFile();
     
     // Si un fichier a été chargé
     if(file === undefined) {
+      dismiss();
       await Dialog.alert( { message: "Aucun fichier n'a été sélectionné !"});
       return;
     }
 
     // Si il est du format CSV
     if(!(["text/csv", "text/comma-separated-values"].includes(file.mimeType) && file.data !== undefined)) {
+      dismiss();
       await Dialog.alert( { message: "Ce type de fichier n'est pas pris en compte !" } );
       return;
     }
@@ -66,11 +73,13 @@ const AddGroup: React.FC = () => {
     // Convertir les données en JSON
     const contacts = getContacts(atob(file.data as string));
     if(contacts.length === 0) {
+      dismiss();
       await Dialog.alert( { message: "Les données du fichier ne sont pas bien formatées !" } );
       return;
     }
 
     setGroup({ ...group, contacts });
+    dismiss();
   }
 
 

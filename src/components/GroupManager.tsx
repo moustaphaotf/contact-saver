@@ -1,13 +1,14 @@
-import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, useIonRouter, IonCard, IonCardHeader,IonCardSubtitle} from '@ionic/react';
+import { IonButton, IonButtons, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, useIonRouter, IonCard, IonCardHeader,IonCardSubtitle, useIonLoading, useIonViewDidEnter } from '@ionic/react';
 import { addCircle, close, pencil, person, save, trash, reload} from 'ionicons/icons';
 import '../data/types';
 import { DefaultContact } from '../data/samples';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { DefaultGroup } from '../data/samples';
 import Empty from './Empty';
 import { ContactsAPI, saveGroup } from '../data';
 import { Dialog } from '@capacitor/dialog';
 import { Contacts } from '@capacitor-community/contacts';
+import { Toast } from '@capacitor/toast';
 
 interface ContainerProps {
   group?: Group
@@ -17,6 +18,16 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
   const router = useIonRouter();
   const [group, setGroup] = useState<Group>(DefaultGroup);
   const [contact, setContact] = useState<Contact>(DefaultContact);
+  
+  // To present the loading activity component
+  const [present, dismiss] = useIonLoading();
+
+  // To hold telInput field
+  const telInput = useRef<HTMLIonInputElement>(null);
+  
+  useIonViewDidEnter(() => {
+    telInput.current?.setFocus();
+  });
 
   useEffect(() => {
       setGroup(_group);
@@ -94,28 +105,33 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
 
     try {
       // Check for the permissions
-      let status = await Contacts.checkPermissions();
+      let permission = await Contacts.checkPermissions();
       
-      if(status.contacts !== "granted") {
+      if(permission.contacts !== "granted") {
         await Dialog.alert({
           title: "Permissions requises",
-          message: "Veuillez autoriser l'application à accéder aux contacts du téléphone !\n\nApps -> Batch Contact Saver -> Permissions"
+          message: "Veuillez autoriser l'application à accéder aux contacts du téléphone !\n\nApps -> Contact Saver -> Permissions"
         });
     
         return;
       }
 
+      // Show a loader
+      present( {
+        message: 'Enregistrement en cours ...',
+      } );
 
       // Save the group first to the system
       // That way the contacts will get updated with their _id if they get saved
-      const res = await ContactsAPI.save(group);
-      if(!res) {
-        Dialog.alert({
-          title: "Erreur interne",
-          message: "Une erreur est survenue lors de l'enregistrement!"
-        });
-  
-        return;
+      const { count, status } = await ContactsAPI.save(group);
+      const total = _group.contacts.length;
+      const suffix = total > 1 ? 's' : '';
+      const message = `${count} contact${suffix} enregistré${suffix} sur ${total}`;
+
+      if(status) {
+        await Toast.show({ text: message, position: 'bottom', duration: 'long' });
+      } else {
+        await Toast.show({text: "Erreur d'enregistrement !", position: 'bottom', duration: 'long'});
       }
 
     } catch(error: any) {
@@ -124,6 +140,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
       saveGroup(_group);
       setContact(DefaultContact);
       router.push('/groups');
+      dismiss();
     }
   }
 
@@ -168,6 +185,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                 onIonInput={event => setContact({ ...contact, phone: event.target.value as string})} 
                 value={contact.phone} 
                 type='tel' 
+                ref={telInput}
                 labelPlacement="stacked" 
                 label={contact.id === DefaultContact.id ? 'Numéro': 'Nouveau numéro'} 
                 placeholder='611 000 000'>
@@ -237,10 +255,16 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
             {group.contacts.map(_contact => (
               <IonItem 
                 button key={_contact.id}
-                onClick={() => setContact(_contact)}
+                onClick={() => {
+                  telInput.current?.setFocus();
+                  setContact(_contact);
+                }}
               >
                 <IonIcon color="primary" slot="start" icon={person} size="large"></IonIcon>
-                <IonLabel>{_contact.phone} (<strong>{ _contact.fullname === "" ? "N/A" : _contact.fullname}</strong>)</IonLabel>
+                <IonLabel>
+                  <p>{_contact.phone}</p>
+                  <p>{ _contact.fullname === "" ? "N/A" : _contact.fullname}</p>
+                </IonLabel>
                 <IonButtons>
                   <IonButton 
                     fill='clear' 
@@ -248,7 +272,13 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
                     size='default'
                     onClick={(event) => {
                       event.stopPropagation();
-                      setContact(contact.id !== 0 && contact.id === _contact.id ? DefaultContact : _contact);
+                      if(contact.id !== 0 && contact.id === _contact.id) {
+                        setContact(DefaultContact);
+                      }
+                      else {
+                        setContact(_contact);
+                        telInput.current?.setFocus();
+                      }
                     }}
                   >
                     <IonIcon icon={contact.id !== 0 && _contact.id === contact.id ? close : pencil}></IonIcon>
