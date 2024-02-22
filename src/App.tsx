@@ -51,7 +51,7 @@ const App: React.FC = () => (
             <UpdateGroup />
           </Route>
           <Route exact path="/">
-            <Redirect to="/new" />
+            <Redirect to="/groups" />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">

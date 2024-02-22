@@ -110,7 +110,7 @@ const GroupManager: React.FC<ContainerProps> = ({ group: _group = DefaultGroup }
       if(permission.contacts !== "granted") {
         await Dialog.alert({
           title: "Permissions requises",
-          message: "Veuillez autoriser l'application à accéder aux contacts du téléphone !\n\nApps -> Batch Contact Saver -> Permissions"
+          message: "Veuillez autoriser l'application à accéder aux contacts du téléphone !\n\nApps -> Contact Saver -> Permissions"
         });
     
         return;

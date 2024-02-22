@@ -1,4 +1,4 @@
-# Batch Contact Saver
+# Contact Saver
 ---
 
 This document is available in those languages
@@ -26,23 +26,23 @@ This document is available in those languages
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <!-- <a href="https://github.com/moustaphaotf/batch-contact-saver">
+  <!-- <a href="https://github.com/moustaphaotf/contact-saver">
     <img src="public/favicon.png" alt="Logo" width="80" height="80">
   </a> -->
 
-<h3 align="center">Batch Contact Saver</h3>
+<h3 align="center">Contact Saver</h3>
 
   <p align="center">
-    Batch Contact Saver is a mobile application intended to help you to easily manage new contacts. Don't do it the old way by saving a contact one by one, rather use our app and save your time. This is the best solution if you want to keep your notebook organised and access related contact with ease !
+    Contact Saver is a mobile application intended to help you to easily manage new contacts. Don't do it the old way by saving a contact one by one, rather use our app and save your time. This is the best solution if you want to keep your notebook organised and access related contact with ease !
     <br />
-    <a href="https://github.com/moustaphaotf/batch-contact-saver"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/moustaphaotf/contact-saver"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/moustaphaotf/batch-contact-saver">View Demo</a>
+    <a href="https://github.com/moustaphaotf/contact-saver">View Demo</a>
     ·
-    <a href="https://github.com/moustaphaotf/batch-contact-saver/issues">Report Bug</a>
+    <a href="https://github.com/moustaphaotf/contact-saver/issues">Report Bug</a>
     ·
-    <a href="https://github.com/moustaphaotf/batch-contact-saver/issues">Request Feature</a>
+    <a href="https://github.com/moustaphaotf/contact-saver/issues">Request Feature</a>
   </p>
 </div>
 
@@ -106,9 +106,9 @@ As a growing project, we are highly looking for your contribution in any form th
 
 ### Installation
 
-Head to the [release page](https://github.com/moustaphaotf/batch-contact-saver/releases) to checkout our latest version.
+Head to the [release page](https://github.com/moustaphaotf/contact-saver/releases) to checkout our latest version.
 
-You can also directly download the [Android version](https://github.com/moustaphaotf/batch-contact-saver/releases/download/v1.0.0/batch-contact-saver-main-d813b6-release-1.0.0.apk) of the **Batch Contact Saver**.
+You can also directly download the [Android version](https://github.com/moustaphaotf/contact-saver/releases/download/v1.0.0/contact-saver-main-d813b6-release-1.0.0.apk) of the **Contact Saver**.
 
 We soon will upload the app to the well known stores for your convenience!
 
@@ -140,7 +140,7 @@ Don't forget to give the project a star! Thanks again!
 
 Mamadou Moustapha Diallo - [@moustaphaotf](https://twitter.com/moustaphaotf) - moustaphaotf@gmail.com
 
-Project Link: [https://github.com/moustaphaotf/batch-contact-saver](https://github.com/moustaphaotf/batch-contact-saver)
+Project Link: [https://github.com/moustaphaotf/contact-saver](https://github.com/moustaphaotf/contact-saver)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -155,14 +155,14 @@ Project Link: [https://github.com/moustaphaotf/batch-contact-saver](https://gith
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/moustaphaotf/batch-contact-saver.svg?style=for-the-badge
-[contributors-url]: https://github.com/moustaphaotf/batch-contact-saver/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/moustaphaotf/batch-contact-saver.svg?style=for-the-badge
-[forks-url]: https://github.com/moustaphaotf/batch-contact-saver/network/members
-[stars-shield]: https://img.shields.io/github/stars/moustaphaotf/batch-contact-saver.svg?style=for-the-badge
-[stars-url]: https://github.com/moustaphaotf/batch-contact-saver/stargazers
-[issues-shield]: https://img.shields.io/github/issues/moustaphaotf/batch-contact-saver.svg?style=for-the-badge
-[issues-url]: https://github.com/moustaphaotf/batch-contact-saver/issues
+[contributors-shield]: https://img.shields.io/github/contributors/moustaphaotf/contact-saver.svg?style=for-the-badge
+[contributors-url]: https://github.com/moustaphaotf/contact-saver/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/moustaphaotf/contact-saver.svg?style=for-the-badge
+[forks-url]: https://github.com/moustaphaotf/contact-saver/network/members
+[stars-shield]: https://img.shields.io/github/stars/moustaphaotf/contact-saver.svg?style=for-the-badge
+[stars-url]: https://github.com/moustaphaotf/contact-saver/stargazers
+[issues-shield]: https://img.shields.io/github/issues/moustaphaotf/contact-saver.svg?style=for-the-badge
+[issues-url]: https://github.com/moustaphaotf/contact-saver/issues
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/moustaphaotf
 [JavaScript-url]: https://developer.mozilla.org/en-US/docs/Web/javascript
